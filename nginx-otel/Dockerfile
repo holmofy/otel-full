@@ -2,6 +2,7 @@ FROM alpine:3.15 as builder
 
 ENV NGINX_VERSION 1.22.1
 ENV OPENTELEMETRY_VERSION v1.8.1
+ENV OPENTELEMETRY_CONTRIB_VERSION webserver/v1.1.0
 
 RUN apk update \
   && apk add --update alpine-sdk build-base cmake linux-headers pcre-dev zlib-dev \
@@ -51,7 +52,7 @@ RUN git clone --shallow-submodules --depth 1 --recurse-submodules -b ${OPENTELEM
   && make -j2 \
   && make install
 
-RUN git clone https://github.com/open-telemetry/opentelemetry-cpp-contrib.git \
+RUN git clone https://github.com/open-telemetry/opentelemetry-cpp-contrib.git -b ${OPENTELEMETRY_CONTRIB_VERSION} \
   && cd opentelemetry-cpp-contrib/instrumentation/nginx \
   && mkdir build \
   && cd build \
